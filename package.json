@@ -9,7 +9,7 @@
     "slider",
     "video"
   ],
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -47,13 +47,9 @@
       "last 1 safari version"
     ]
   },
-  "dependencies": {
-    "d3-drag": "^3.0.0",
-    "d3-selection": "^3.0.0"
-  },
   "peerDependencies": {
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.0",

@@ -7,6 +7,7 @@ import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 
 const packageJson = require('./package.json')
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default [
   {
     input: 'src/component/index.ts',
@@ -28,7 +29,7 @@ export default [
     external: ['react', 'react-dom'],
   },
   {
-    input: 'dist/esm/types/component/index.d.ts',
+    input: 'dist/esm/component/index.d.ts',
     output: [{ file: 'dist/index.d.ts', format: 'esm' }],
     plugins: [dts()],
   },
