@@ -1,6 +1,6 @@
 {
   "name": "@justinseibert/react-transition",
-  "description": "Video timeline controller built with canvas and d3 for better touch performance",
+  "description": "Automatic transition wrapper for React components (slightly less annoying than react-transition-group).",
   "author": "Justin Seibert",
   "keywords": [
     "react",
@@ -9,7 +9,7 @@
     "slider",
     "video"
   ],
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
