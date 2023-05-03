@@ -10,18 +10,16 @@ export interface Props {
     className?: string
     delay?: number
     duration?: number
-    elem?: any
     when: boolean
     stagger?: number
     type?: string
+    onComplete?: (transition: TransitionEnum) => void
 }
 
 export interface StyleProps {
     delay?: number
     duration?: number
     style?: string
-    height?: number
-    width?: number
 }
 
 export interface TransitionRulesType {

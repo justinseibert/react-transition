@@ -82,27 +82,6 @@ export const styles = (props: StyleProps) => {
                 transition: `opacity ${getTransition(props)}, transform ${getTransition(props)}`,
             })
 
-        case 'expandY-before':
-            return {
-                left: '-999999px',
-                position: 'fixed',
-                top: '-999999px',
-            }
-
-        case 'expandY-exit':
-            return {
-                height: 0,
-                overflow: 'hidden',
-                transition: `height ${getTransition(props)}`,
-            }
-
-        case 'expandY-enter':
-            return {
-                height: props.height || 'auto',
-                overflow: 'hidden',
-                transition: `height ${getTransition(props)}`,
-            }
-
         default:
             return {}
     }

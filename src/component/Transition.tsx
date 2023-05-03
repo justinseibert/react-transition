@@ -9,58 +9,42 @@ const Transition: React.FC<Props> = ({
     className = '',
     delay = 0,
     duration = DEFAULT_TRANSITION_DURATION,
-    elem = null,
     when = false,
     stagger = 0,
     type = 'fadeUp',
     children,
+    onComplete,
 }: Props) => {
-    const [height, setHeight] = useState(0)
-    const [width, setWidth] = useState(0)
+    const timerRef = React.useRef<number | null>(null)
+    const [totalDuration] = useState(delay + stagger * React.Children.count(children) + duration)
     const [transition, setTransition] = useState(TransitionEnum.Exit)
+    const [prevTransition, setPrevTransition] = useState(TransitionEnum.Exit)
 
-    const asyncTransition = async (_transition: TransitionEnum) => {
-        return new Promise(() => {
-            setTransition(_transition)
-        })
-    }
-
-    const asyncDimension = async (_height: number, _width: number) => {
-        return new Promise(() => {
-            setHeight(_height)
-            setWidth(_width)
-        })
-    }
-
-    const handleTransition = useCallback(async () => {
-        if (elem && !when && transition !== TransitionEnum.Before) {
-            await asyncTransition(TransitionEnum.Enter)
-        }
-
-        window.requestAnimationFrame(async () => {
-            await asyncTransition(when ? TransitionEnum.Enter : TransitionEnum.Exit)
-            if (when) {
-                window.setTimeout(() => {
-                    setTransition(TransitionEnum.None)
-                }, delay + stagger * React.Children.count(children) + duration + 10)
+    const watch = useCallback(
+        (currentTransition: TransitionEnum) => {
+            if (onComplete) {
+                timerRef.current = window.setTimeout(() => {
+                    onComplete(currentTransition)
+                }, totalDuration)
             }
-        })
-    }, [elem, when, transition, delay, stagger, children, duration])
+            setPrevTransition(currentTransition)
+        },
+        [onComplete, totalDuration]
+    )
 
     useEffect(() => {
-        const handleElem = async () => {
-            if (elem && elem.current) {
-                await asyncTransition(TransitionEnum.Before)
-                await asyncDimension(elem.current.offsetHeight, elem.current.offsetWidth)
-            }
-            handleTransition()
+        if (transition !== prevTransition) {
+            watch(transition)
         }
-        handleElem()
-    }, [elem, handleTransition])
+    }, [transition, prevTransition, watch])
 
     useEffect(() => {
-        handleTransition()
-    }, [when, handleTransition])
+        if (when) {
+            setTransition(TransitionEnum.Enter)
+        } else {
+            setTransition(TransitionEnum.Exit)
+        }
+    }, [when])
 
     return React.Children.map(children, (child: any, index: number) => {
         if (!child) {
@@ -75,11 +59,11 @@ const Transition: React.FC<Props> = ({
             ].join(' '),
             key: index,
             style: styles({
-                delay: (delay + stagger) * (index + 1),
+                delay:
+                    (delay + stagger) *
+                    (transition === TransitionEnum.Enter ? index + 1 : React.Children.count(children) - index),
                 duration,
-                height,
                 style: transition ? `${type}-${transition}` : '',
-                width,
             }),
         })
     })
