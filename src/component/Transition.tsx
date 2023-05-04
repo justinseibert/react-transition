@@ -18,6 +18,7 @@ const Transition: React.FC<Props> = ({
     const timerRef = React.useRef<number | null>(null)
     const [totalDuration] = useState(delay + stagger * React.Children.count(children) + duration)
     const [transition, setTransition] = useState(TransitionEnum.Exit)
+    const [isReady, setIsReady] = useState(false)
     const [prevTransition, setPrevTransition] = useState(TransitionEnum.Exit)
 
     const watch = useCallback(
@@ -39,12 +40,16 @@ const Transition: React.FC<Props> = ({
     }, [transition, prevTransition, watch])
 
     useEffect(() => {
-        if (when) {
+        if (isReady) {
             setTransition(TransitionEnum.Enter)
         } else {
             setTransition(TransitionEnum.Exit)
         }
-    }, [when])
+    }, [isReady])
+
+    useEffect(() => {
+        setIsReady(when && !!children)
+    }, [when, children])
 
     return React.Children.map(children, (child: any, index: number) => {
         if (!child) {
