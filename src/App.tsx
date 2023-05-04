@@ -1,13 +1,11 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import Transition from 'component'
 
-const CustomComponent: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
+const CustomComponent: React.FC<any> = ({ className, style, children, ...props }: any) => {
     return (
-        <>
-            <div className='custom-component' style={{ padding: 10 }}>
-                {children}
-            </div>
-        </>
+        <div className={`${className} custom`} style={{ padding: 10, ...style }} id={children} {...props}>
+            {children}
+        </div>
     )
 }
 
