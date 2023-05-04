@@ -1,9 +1,4 @@
-export enum TransitionEnum {
-    Enter = 'enter',
-    Exit = 'exit',
-    Before = 'before',
-    None = '',
-}
+export type TransitionKeys = 'enter' | 'exit' | 'before' | 'none'
 
 export interface Props {
     children: any
@@ -13,7 +8,7 @@ export interface Props {
     when: boolean
     stagger?: number
     type?: string
-    onComplete?: (transition: TransitionEnum) => void
+    onComplete?: (transition: TransitionKeys) => void
 }
 
 export interface StyleProps {

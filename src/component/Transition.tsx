@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { styles } from './Style'
-import { Props, TransitionEnum } from './Type'
+import { Props, TransitionKeys } from './Type'
 
 export const DEFAULT_TRANSITION_DURATION = 300
 
@@ -17,12 +17,12 @@ const Transition: React.FC<Props> = ({
 }: Props) => {
     const timerRef = React.useRef<number | null>(null)
     const [totalDuration] = useState(delay + stagger * React.Children.count(children) + duration)
-    const [transition, setTransition] = useState(TransitionEnum.Exit)
+    const [transition, setTransition] = useState<TransitionKeys>('exit')
+    const [prevTransition, setPrevTransition] = useState<TransitionKeys>('exit')
     const [isReady, setIsReady] = useState(false)
-    const [prevTransition, setPrevTransition] = useState(TransitionEnum.Exit)
 
     const watch = useCallback(
-        (currentTransition: TransitionEnum) => {
+        (currentTransition: TransitionKeys) => {
             if (onComplete) {
                 timerRef.current = window.setTimeout(() => {
                     onComplete(currentTransition)
@@ -41,9 +41,9 @@ const Transition: React.FC<Props> = ({
 
     useEffect(() => {
         if (isReady) {
-            setTransition(TransitionEnum.Enter)
+            setTransition('enter')
         } else {
-            setTransition(TransitionEnum.Exit)
+            setTransition('exit')
         }
     }, [isReady])
 
@@ -71,7 +71,7 @@ const Transition: React.FC<Props> = ({
                 ...styles({
                     delay:
                         (delay + stagger) *
-                        (transition === TransitionEnum.Enter ? index + 1 : React.Children.count(children) - index),
+                        (transition === 'enter' ? index + 1 : React.Children.count(children) - index),
                     duration,
                     style: transition ? `${type}-${transition}` : '',
                 }),
