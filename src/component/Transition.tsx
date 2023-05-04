@@ -52,19 +52,25 @@ const Transition: React.FC<Props> = ({
         }
         return React.cloneElement(child, {
             className: [
+                child.props.className,
                 className,
                 'component--transition-wrapper',
                 transition ? `component--transition-${transition}` : '',
                 stagger ? `component--transition-child component--transition-stagger-${index}` : '',
-            ].join(' '),
+            ]
+                .filter(Boolean)
+                .join(' '),
             key: index,
-            style: styles({
-                delay:
-                    (delay + stagger) *
-                    (transition === TransitionEnum.Enter ? index + 1 : React.Children.count(children) - index),
-                duration,
-                style: transition ? `${type}-${transition}` : '',
-            }),
+            style: {
+                ...child.props.style,
+                ...styles({
+                    delay:
+                        (delay + stagger) *
+                        (transition === TransitionEnum.Enter ? index + 1 : React.Children.count(children) - index),
+                    duration,
+                    style: transition ? `${type}-${transition}` : '',
+                }),
+            },
         })
     })
 }

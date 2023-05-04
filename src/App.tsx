@@ -3,7 +3,7 @@ import Transition from 'component'
 
 const App: React.FC = () => {
     const containerRef = React.useRef<HTMLDivElement>(null)
-    const [isVisible, toggleVisible] = useState(false)
+    const [isVisible, toggleVisible] = useState(true)
     const [startTime, setStartTime] = useState(0)
 
     const handleStart = () => {
@@ -23,10 +23,11 @@ const App: React.FC = () => {
         <>
             <div ref={containerRef}>
                 <Transition when={isVisible} stagger={100} onComplete={handleComplete}>
-                    <div>to do...</div>
-                    <div>to do...</div>
-                    <div>to do...</div>
-                    <div>to do...</div>
+                    {Array.from({ length: 10 }).map((_, index) => (
+                        <div key={index} className='custom-thing' style={{ padding: 10 }}>
+                            {index}
+                        </div>
+                    ))}
                 </Transition>
             </div>
             <button onClick={handleStart}>toggle</button>
