@@ -1,13 +1,21 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import Transition from 'component'
 
+const CustomComponent: React.FC<{ children: React.ReactNode }> = ({ children }: any) => {
+    return (
+        <>
+            <div className='custom-component' style={{ padding: 10 }}>
+                {children}
+            </div>
+        </>
+    )
+}
+
 const App: React.FC = () => {
-    const containerRef = React.useRef<HTMLDivElement>(null)
     const [isVisible, toggleVisible] = useState(true)
     const [startTime, setStartTime] = useState(0)
 
     const handleStart = () => {
-        setStartTime(Date.now())
         toggleVisible(!isVisible)
     }
 
@@ -15,17 +23,30 @@ const App: React.FC = () => {
         (type: any) => {
             const endTime = Date.now()
             console.log('duration', type, endTime - startTime)
+            setStartTime(0)
         },
         [startTime]
     )
 
+    useEffect(() => {
+        setStartTime(Date.now())
+    }, [isVisible])
+
     return (
         <>
-            <div ref={containerRef}>
+            <div>status: {!startTime ? 'stopped' : 'transitioning'}</div>
+            <div style={{ width: '50%', display: 'inline-block' }}>
                 <Transition when={isVisible} stagger={100} onComplete={handleComplete}>
                     {Array.from({ length: 10 }).map((_, index) => (
-                        <div key={index} className='custom-thing' style={{ padding: 10 }}>
-                            {index}
+                        <CustomComponent key={index}>custom {index}</CustomComponent>
+                    ))}
+                </Transition>
+            </div>
+            <div style={{ width: '50%', display: 'inline-block' }}>
+                <Transition when={isVisible} stagger={100} onComplete={handleComplete}>
+                    {Array.from({ length: 10 }).map((_, index) => (
+                        <div key={index} className='custom-component' style={{ padding: 10 }}>
+                            inline {index}
                         </div>
                     ))}
                 </Transition>
